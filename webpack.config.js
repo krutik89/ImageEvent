@@ -1,35 +1,49 @@
 const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+// Production entries — widget + config panel only (no App.tsx harness)
 const COMPONENTS = {
   ImageWidget: './src/components/ImageWidget/index.ts',
   ImageWidgetConfiguration: './src/components/ImageWidgetConfiguration/index.ts',
 };
 
-module.exports = (env = {}) => {
-  const isDev = !!env.dev;
-
-  const entries = isDev
-    ? { ...COMPONENTS, app: './src/index.tsx' }
-    : COMPONENTS;
+module.exports = (env, argv) => {
+  const isProd = argv.mode === 'production';
 
   return {
-    mode: isDev ? 'development' : 'production',
-    entry: entries,
+    mode: isProd ? 'production' : 'development',
+
+    // Prod: only self-registering index.ts entries
+    // Dev: App.tsx harness only
+    entry: isProd
+      ? COMPONENTS
+      : { app: './src/index.tsx' },
+
     output: {
-      path: path.resolve(__dirname, 'dist'),
-      filename: '[name].js',
-      clean: !isDev,
+      path: path.resolve(__dirname, isProd ? 'dist-bundle' : 'dist'),
+      filename: isProd ? '[name].bundle.js' : '[name].js',
+      globalObject: 'this',
+      clean: true,
     },
+
+    // Prod: React is provided globally by Lens — external
+    // Dev: React bundled in (no globals needed)
+    externals: isProd
+      ? {
+          react: 'React',
+          'react-dom': 'ReactDOM',
+          'react-dom/client': 'ReactDOM',
+          'react-dom/server': 'ReactDOMServer',
+          'react/jsx-runtime': 'ReactJSXRuntime',
+          'react/jsx-dev-runtime': 'ReactJSXRuntime',
+        }
+      : {},
+
     resolve: {
       extensions: ['.tsx', '.ts', '.js'],
     },
-    externals: {
-      react: 'React',
-      'react-dom': 'ReactDOM',
-      // React 18 UMD exposes createRoot directly on window.ReactDOM — no .client sub-property
-      'react-dom/client': 'ReactDOM',
-    },
+
     module: {
       rules: [
         {
@@ -48,19 +62,34 @@ module.exports = (env = {}) => {
         },
         {
           test: /\.css$/,
-          use: ['style-loader', 'css-loader'],
+          // Dev: style-loader injects into <style> tags with hot reload
+          // Prod: MiniCssExtractPlugin extracts to [name].bundle.css
+          use: [
+            isProd ? MiniCssExtractPlugin.loader : 'style-loader',
+            'css-loader',
+          ],
+        },
+        {
+          test: /\.(png|jpg|jpeg|gif|webp|svg)$/i,
+          type: 'asset/resource',
+          generator: { filename: 'assets/[name][ext]' },
         },
       ],
     },
-    plugins: isDev
-      ? [new HtmlWebpackPlugin({ template: './public/index.html', chunks: ['app'] })]
-      : [],
-    devServer: isDev
-      ? {
-          port: 3001,
-          hot: true,
-          open: true,
-        }
-      : undefined,
+
+    plugins: [
+      ...(isProd
+        ? [new MiniCssExtractPlugin({ filename: '[name].bundle.css' })]
+        : [new HtmlWebpackPlugin({ template: './public/index.html', chunks: ['app'] })]),
+    ],
+
+    ...(!isProd && {
+      devServer: {
+        port: 3001,
+        hot: true,
+        open: true,
+        historyApiFallback: true,
+      },
+    }),
   };
 };
