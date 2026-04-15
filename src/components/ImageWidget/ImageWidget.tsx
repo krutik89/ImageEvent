@@ -22,15 +22,20 @@ const EVALUATE: Record<ConditionOperator, (a: number, b: number) => boolean> = {
 function resolveImage(config: ImageWidgetConfig | undefined, data: ImageWidgetData | undefined): string {
   if (!config) return '';
 
+  console.log('[ImageWidget] resolveImage — data:', data);
+  console.log('[ImageWidget] resolveImage — conditions:', config.conditions);
+
   if (Array.isArray(data) && Array.isArray(config.conditions)) {
     for (const condition of config.conditions) {
       const dataValue = data[condition.dataPointIndex ?? 0]?.data;
-      if (typeof dataValue !== 'number') continue;
       const threshold = parseFloat(condition.value);
       const fn = EVALUATE[condition.operator];
-      if (!isNaN(threshold) && fn && fn(dataValue, threshold)) {
-        return condition.imageUrl || '';
-      }
+      const result = typeof dataValue === 'number' && !isNaN(threshold) && fn && fn(dataValue, threshold);
+      console.log(
+        `[ImageWidget] condition — data[${condition.dataPointIndex}].data=${dataValue} ${condition.operator} ${condition.value} →`,
+        result
+      );
+      if (result) return condition.imageUrl || '';
     }
   }
 
@@ -60,8 +65,15 @@ export const ImageWidget: React.FC<ImageWidgetProps> = ({
   const [currentConfig, setCurrentConfig] = useState<ImageWidgetConfig | undefined>(config);
   const [currentData, setCurrentData] = useState<ImageWidgetData | undefined>(data);
 
-  useEffect(() => { setCurrentConfig(config); }, [config]);
-  useEffect(() => { setCurrentData(data); }, [data]);
+  useEffect(() => {
+    console.log('[ImageWidget] config prop updated:', config);
+    setCurrentConfig(config);
+  }, [config]);
+
+  useEffect(() => {
+    console.log('[ImageWidget] data prop updated:', data);
+    setCurrentData(data);
+  }, [data]);
 
   const imageUrl = resolveImage(currentConfig, currentData);
   const linkUrl    = currentConfig?.link?.url?.trim();
