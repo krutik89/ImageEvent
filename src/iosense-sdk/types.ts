@@ -35,5 +35,6 @@ export interface ImageWidgetConfig {
   style: ImageWidgetStyle;
 }
 
-// The data format passed by the platform resolver via the `data` prop
-export type ImageWidgetData = Array<{ data: number }>;
+// The data format passed by the platform resolver via the `data` prop.
+// `data` may arrive as a string from the platform even though it represents a number.
+export type ImageWidgetData = Array<{ data: number | string; [key: string]: unknown }>;

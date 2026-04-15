@@ -27,10 +27,11 @@ function resolveImage(config: ImageWidgetConfig | undefined, data: ImageWidgetDa
 
   if (Array.isArray(data) && Array.isArray(config.conditions)) {
     for (const condition of config.conditions) {
-      const dataValue = data[condition.dataPointIndex ?? 0]?.data;
+      const raw = data[condition.dataPointIndex ?? 0]?.data;
+      const dataValue = parseFloat(String(raw));   // handles both string "24145.78" and number 24145.78
       const threshold = parseFloat(condition.value);
       const fn = EVALUATE[condition.operator];
-      const result = typeof dataValue === 'number' && !isNaN(threshold) && fn && fn(dataValue, threshold);
+      const result = !isNaN(dataValue) && !isNaN(threshold) && fn && fn(dataValue, threshold);
       console.log(
         `[ImageWidget] condition — data[${condition.dataPointIndex}].data=${dataValue} ${condition.operator} ${condition.value} →`,
         result
