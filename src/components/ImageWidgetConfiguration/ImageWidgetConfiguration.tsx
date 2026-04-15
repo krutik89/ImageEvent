@@ -267,7 +267,6 @@ export const ImageWidgetConfiguration: React.FC<ImageWidgetConfigurationProps> =
                   <div className="iw-config__conditions-list">
                     {cfg.conditions.map((condition, index) => (
                       <ProductAccordionItem
-                        key={condition.id}
                         id={condition.id}
                         title={`Condition ${index + 1}`}
                         subtitle={
@@ -317,7 +316,6 @@ export const ImageWidgetConfiguration: React.FC<ImageWidgetConfigurationProps> =
                                 <DropdownMenu>
                                   {OPERATOR_OPTIONS.map((op) => (
                                     <ActionListItem
-                                      key={op.value}
                                       id={`op-${condition.id}-${op.value}`}
                                       contentType="Item"
                                       title={op.label}
