@@ -66,12 +66,12 @@ export const ImageWidget: React.FC<ImageWidgetProps> = ({
   const [currentData, setCurrentData] = useState<ImageWidgetData | undefined>(data);
 
   useEffect(() => {
-    console.log('[ImageWidget] config prop updated:', config);
+    console.log('[ImageWidget] config:', config);
     setCurrentConfig(config);
   }, [config]);
 
   useEffect(() => {
-    console.log('[ImageWidget] data prop updated:', data);
+    console.log('[ImageWidget] data:', data);
     setCurrentData(data);
   }, [data]);
 
