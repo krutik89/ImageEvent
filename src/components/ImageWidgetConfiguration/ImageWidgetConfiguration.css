@@ -1,0 +1,135 @@
+/* ImageWidgetConfiguration — BEM scoped styles */
+
+/* Config starts directly from Tabs — no Card wrapper, no title */
+.iw-config {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* Tab content area */
+.iw-config__tab-content {
+  padding: var(--spacing-04);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-04);
+}
+
+/* Accordion body — always full width, flex column.
+   Required to prevent design-sdk child components from shrinking. */
+.iw-config__accordion-body {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-04);
+  padding: var(--spacing-04) var(--spacing-04) var(--spacing-05);
+}
+
+/* Help text beneath fields */
+.iw-config__help-text {
+  color: var(--text-default-secondary);
+  display: block;
+}
+
+/* Section label row inside accordion */
+.iw-config__section-label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-01);
+}
+
+/* Thin divider between default image and conditions list */
+.iw-config__divider {
+  width: 100%;
+  height: 1px;
+  background-color: var(--border-gray-subtle);
+}
+
+/* Conditions list container */
+.iw-config__conditions-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-03);
+  width: 100%;
+}
+
+/* Add condition button row — right-aligned */
+.iw-config__add-row {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: var(--spacing-02);
+}
+
+/* Body inside each ProductAccordionItem condition */
+.iw-config__condition-body {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-04);
+  padding: var(--spacing-04);
+}
+
+/* Operator + value side-by-side */
+.iw-config__field-row {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-04);
+  width: 100%;
+}
+
+.iw-config__index-wrap {
+  flex: 0 0 80px;
+  min-width: 0;
+}
+
+.iw-config__operator-wrap {
+  flex: 1 1 50%;
+  min-width: 0;
+}
+
+.iw-config__value-wrap {
+  flex: 1 1 40%;
+  min-width: 0;
+}
+
+/* Image preview row: thumbnail + filename + remove button */
+.iw-config__image-preview {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-04);
+  padding: var(--spacing-03);
+  border: var(--fds-border-subtle);
+  border-radius: var(--global-border-radius-medium);
+  background-color: var(--background-default-subtle);
+}
+
+.iw-config__image-thumb {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: var(--global-border-radius-medium);
+  flex-shrink: 0;
+}
+
+.iw-config__image-name {
+  flex: 1;
+  color: var(--text-default-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Link tab section */
+.iw-config__link-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-04);
+  width: 100%;
+  padding: var(--spacing-04);
+  box-sizing: border-box;
+}

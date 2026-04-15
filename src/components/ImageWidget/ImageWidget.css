@@ -1,0 +1,53 @@
+/* ImageWidget — BEM scoped styles
+   Dynamic values come from CSS custom properties set via style attribute on the root element.
+   Tokens: --iw-bg, --iw-border-color, --iw-border-width, --iw-border-radius, --iw-padding
+*/
+
+.image-widget {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.image-widget--card {
+  background-color: var(--iw-bg);
+  border: var(--iw-border-width) solid var(--iw-border-color);
+  border-radius: var(--iw-border-radius);
+  padding: var(--iw-padding);
+  box-shadow: var(--fds-shadow-sm);
+}
+
+.image-widget--clickable {
+  cursor: pointer;
+}
+
+.image-widget--clickable:hover .image-widget__image {
+  opacity: 0.9;
+}
+
+.image-widget__image {
+  max-width: 100%;
+  max-height: 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  transition: opacity 0.15s ease;
+}
+
+.image-widget__empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 80px;
+}
+
+.image-widget__empty-text {
+  color: var(--text-default-tertiary);
+}

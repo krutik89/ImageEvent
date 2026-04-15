@@ -1,0 +1,4 @@
+node_modules/
+dist/
+public/react.js
+public/react-dom.js
